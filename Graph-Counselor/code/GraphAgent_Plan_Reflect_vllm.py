@@ -9,11 +9,11 @@ import json
 import requests
 import time
 # from langchain_community.llms import OpenAI
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import QianfanChatEndpoint
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from langchain.prompts import PromptTemplate, ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from graph_prompts import GRAPH_DEFINITION, REFLECTION_HEADER, LAST_TRIAL_HEADER, REFLECTION_AFTER_LAST_TRIAL_HEADER
 from graph_fewshots import REFLECT_EXAMPLES_BASE, REFLECT_EXAMPLES_SHORT_MULTIPLE
 from graph_fewshots import  SHORT_EXAMPLES, PLAN_EXAMPLES, PLAN_SHORT_EXAMPLES, PLAN_SHORT_REFLECT_EXAMPLES, PLAN_SHORT_EVAL_EXAMPLES, PLAN_ONLY_EXAMPLES
@@ -71,14 +71,14 @@ class GraphAgent_Plan_Reflect_vllm:
             self.enc = AutoTokenizer.from_pretrained(args.llm_version, use_auth_token=True)
         elif args.llm_version in ["../model/gemma-2-9b-it", "../model/gemma-2-9b-it"]:
             self.enc = AutoTokenizer.from_pretrained(args.llm_version, use_auth_token=True)
-        elif args.llm_version in ["../model/Qwen2.5-7B-Instruct"]:
+        elif args.llm_version in ["../model/Qwen2.5-7B-Instruct", "/graph/suyongxin/GraphOS/cache/modelscope/models/Qwen--Qwen3-8B/snapshots/master"]:
             self.enc = AutoTokenizer.from_pretrained(args.llm_version, trust_remote_code=True)
         elif args.llm_version in ['ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']:
             self.enc = tiktoken.encoding_for_model("text-davinci-003")
         else:
             raise ValueError("The given llm_version is not correct.")
         
-        self.enc2 = AutoTokenizer.from_pretrained("../model/Qwen2.5-7B-Instruct", trust_remote_code=True)
+        self.enc2 = AutoTokenizer.from_pretrained(args.llm_version, trust_remote_code=True)
         
         self.reflexion_strategy =args.reflexion_strategy
         self.max_reflect =args.max_reflect
@@ -386,9 +386,9 @@ class GraphAgent_Plan_Reflect_vllm:
             return gemma_format_step(
                 mid_ans,self._build_agent_prompt_4096()
             )
-        elif self.llm_version in ['../model/Qwen2.5-7B-Instruct']:
+        elif self.llm_version in ['../model/Qwen2.5-7B-Instruct', '/graph/suyongxin/GraphOS/cache/modelscope/models/Qwen--Qwen3-8B/snapshots/master']:
             payload = {
-            "model": "Qwen2.5-7B-Instruct",
+            "model": "Qwen3-8B" if self.llm_version.endswith("Qwen--Qwen3-8B/snapshots/master") else "Qwen2.5-7B-Instruct",
             "prompt": self._build_agent_prompt()[1].content,
             "max_tokens": 512,
             "temperature": 0.7,
@@ -641,10 +641,10 @@ class GraphAgent_Plan_Reflect_vllm:
             print(f'mid_ans: {mid_ans}')
             print('*******************************************************************')
             return reflect_format_step(mid_ans)
-        elif self.reflect_version in ['Qwen2.5-7B-Instruct']:
+        elif self.reflect_version in ['Qwen2.5-7B-Instruct', 'Qwen3-8B']:
 
             payload = {
-            "model": "Qwen2.5-7B-Instruct",
+            "model": self.reflect_version,
             "prompt": self._build_reflection_prompt()[1].content,
             "max_tokens": 1024,
             "temperature": 0.7,

@@ -61,9 +61,9 @@ args.data_dir = os.path.join(args.path, "data.json")
 args.node_text_keys = NODE_TEXT_KEYS[args.dataset]
 args.ref_dataset = args.dataset if not args.ref_dataset else args.ref_dataset
 
-assert args.llm_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "/cpfs02/user/lidong1/model/Mixtral-8x7B-Instruct-v0.1", "/cpfs02/user/lidong1/model/Llama-2-13b-chat-hf", "/cpfs02/user/lidong1/model/Mistral-Nemo-Instruct-2407", '/nas/shared/ma4agi/model/Mistral-Nemo-Instruct-2407', '/cpfs02/user/lidong1/model/gemma-2-9b-it', '/nas/shared/ma4agi/model/gemma-2-9b-it', '/cpfs02/user/lidong1/model/Qwen2.5-7B-Instruct', '/cpfs02/user/lidong1/model/Meta-Llama-3.1-70B-Instruct', '/cpfs02/user/lidong1/model/Meta-Llama-3.1-70B-Instruct-GPTQ-INT4', '/cpfs02/user/lidong1/model/Qwen2.5-72B-Instruct', '/cpfs02/user/lidong1/model/Qwen2.5-72B-Instruct-GPTQ-Int4', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
-assert args.eval_llm_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "Mixtral-8x7B-Instruct-v0.1", "Llama-2-13b-chat-hf", "Mistral-Nemo-Instruct-2407", 'gemma-2-9b-it', 'Qwen2.5-7B-Instruct', 'Meta-Llama-3.1-70B-Instruct', 'Qwen2.5-72B-Instruct', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
-assert args.reflect_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "Mixtral-8x7B-Instruct-v0.1", "Llama-2-13b-chat-hf", "Mistral-Nemo-Instruct-2407", 'gemma-2-9b-it', 'Qwen2.5-7B-Instruct', 'Meta-Llama-3.1-70B-Instruct', 'Qwen2.5-72B-Instruct', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
+assert args.llm_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "/cpfs02/user/lidong1/model/Mixtral-8x7B-Instruct-v0.1", "/cpfs02/user/lidong1/model/Llama-2-13b-chat-hf", "/cpfs02/user/lidong1/model/Mistral-Nemo-Instruct-2407", '/nas/shared/ma4agi/model/Mistral-Nemo-Instruct-2407', '/cpfs02/user/lidong1/model/gemma-2-9b-it', '/nas/shared/ma4agi/model/gemma-2-9b-it', '/cpfs02/user/lidong1/model/Qwen2.5-7B-Instruct', '/cpfs02/user/lidong1/model/Meta-Llama-3.1-70B-Instruct', '/cpfs02/user/lidong1/model/Meta-Llama-3.1-70B-Instruct-GPTQ-INT4', '/cpfs02/user/lidong1/model/Qwen2.5-72B-Instruct', '/cpfs02/user/lidong1/model/Qwen2.5-72B-Instruct-GPTQ-Int4', '/graph/suyongxin/GraphOS/cache/modelscope/models/Qwen--Qwen3-8B/snapshots/master', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
+assert args.eval_llm_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "Mixtral-8x7B-Instruct-v0.1", "Llama-2-13b-chat-hf", "Mistral-Nemo-Instruct-2407", 'gemma-2-9b-it', 'Qwen2.5-7B-Instruct', 'Meta-Llama-3.1-70B-Instruct', 'Qwen2.5-72B-Instruct', 'Qwen3-8B', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
+assert args.reflect_version in ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-1106', 'gpt-3.5-turbo-16k', "Mixtral-8x7B-Instruct-v0.1", "Llama-2-13b-chat-hf", "Mistral-Nemo-Instruct-2407", 'gemma-2-9b-it', 'Qwen2.5-7B-Instruct', 'Meta-Llama-3.1-70B-Instruct', 'Qwen2.5-72B-Instruct', 'Qwen3-8B', 'ERNIE-Speed-8K', 'ERNIE-Speed-128K', 'ERNIE-Lite-8K', 'ERNIE-Tiny-8K']
 assert args.reflexion_strategy in ["None","Last_attempt","Reflexion","Last_attempt_and_Reflexion"]
 assert args.llm_way in ["vllm","transformer"]
 assert args.judge_correct in ["llm","groundtruth"]
@@ -96,12 +96,7 @@ def main():
     output_file_path_first = args.save_file_first
 
     parent_folder = os.path.dirname(output_file_path)
-    parent_parent_folder = os.path.dirname(parent_folder)
-    print(parent_parent_folder)
-    if not os.path.exists(parent_parent_folder):
-        os.mkdir(parent_parent_folder)
-    if not os.path.exists(parent_folder):
-        os.mkdir(parent_folder)
+    os.makedirs(parent_folder, exist_ok=True)
 
     if not os.path.exists('{}/logs'.format(parent_folder)):
         os.makedirs('{}/logs'.format(parent_folder))

@@ -1,0 +1,18 @@
+# data
+data/processed_data/**/graph.json
+data/processed_data/**/graph_raw.json
+data/processed_data/**/embeds-all-mpnet-base-v2.meta.pkl
+data/processed_data/**/embeds-all-mpnet-base-v2.npy
+data/processed_data/**/embeds-all-mpnet-base-v2.progress
+data/processed_data/**/cache-all-mpnet-base-v2.pkl
+
+# __pycache__
+Graph-Counselor/code/__pycache__
+Graph-Counselor/code/tools/__pycache__
+
+# log
+log/
+Graph-Counselor/results/
+
+# model
+model/

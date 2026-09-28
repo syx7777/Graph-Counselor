@@ -7,11 +7,11 @@ import qianfan
 import time
 import json
 # from langchain_community.llms import OpenAI
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import QianfanChatEndpoint
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from langchain.prompts import PromptTemplate, ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from graph_prompts import GRAPH_DEFINITION, REFLECTION_HEADER, LAST_TRIAL_HEADER, REFLECTION_AFTER_LAST_TRIAL_HEADER
 from graph_fewshots import EXAMPLES, REFLECT_EXAMPLES
 from tools import graph_funcs, retriever

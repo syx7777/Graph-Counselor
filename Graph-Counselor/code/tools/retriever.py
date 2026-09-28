@@ -39,9 +39,10 @@ class Retriever:
         self.use_gpu = args.faiss_gpu
         self.node_text_keys = args.node_text_keys
         self.model_name = args.embedder_name
-        self.model = sentence_transformers.SentenceTransformer(
-            '../model/all-mpnet-base-v2'
-            )
+        model_path = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), "../../model/all-mpnet-base-v2"
+        ))
+        self.model = sentence_transformers.SentenceTransformer(model_path)
         self.graph = graph
         self.cache = args.embed_cache
         self.cache_dir = args.embed_cache_dir
